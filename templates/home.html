@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block content %}
+    {% for sc in scorecards %}
+        <article class="media content-section">
+            <div class="media-body">
+            <div class="article-metadata">
+                <a class="mr-2" href="#">{{ sc.owner }}</a>
+                <small class="text-muted">{{ sc.deployment_date }}</small>
+            </div>
+            <h2><a class="article-title" href="#">{{ sc.product }} - {{ sc.type }}</a></h2>
+            <p class="article-content">Discriminatory Power: {{ sc.discrimatory_power }}</p>
+            <p class="article-content">PSI: {{ sc.psi }}</p>
+            <p class="article-content">Final Rating: {{ sc.final_rating }}</p>
+            </div>
+        </article>
+    {% endfor %}
+{% endblock content %}
