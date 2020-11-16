@@ -31,6 +31,11 @@ def home():
     scorecards = Scorecard.query.all()
     return render_template("home.html", scorecards=scorecards)
 
+@app.route("/scorecard/<int:id>")
+def scorecard(id):
+    scorecard = Scorecard.query.get_or_404(id)
+    return render_template("scorecard.html", sc=scorecard)
+
 @app.route("/about")
 def about():
     return render_template("about.html", title = "About Us")

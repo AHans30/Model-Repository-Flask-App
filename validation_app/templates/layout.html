@@ -16,6 +16,7 @@
         {% endif %}
     </head>
     <body>
+      <!--img class="logo" src="{{ url_for('static', filename='HDFC_Bank_logo.png')}}" width = 100 hieght = 100 style="float:left"-->
         <header class="site-header">
         <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
           <div class="container">
@@ -26,7 +27,7 @@
             <div class="collapse navbar-collapse" id="navbarToggle">
               <div class="navbar-nav mr-auto">
                 <a class="nav-item nav-link" href="/">Home</a>
-                <a class="nav-item nav-link" href="/about">About</a>
+                <a class="nav-item nav-link" href="{{ url_for('scorecard_submit') }}">Submit PDV Report</a>
               </div>
               <!-- Navbar Right Side -->
               <div class="navbar-nav">

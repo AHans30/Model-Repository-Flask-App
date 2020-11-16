@@ -4,12 +4,13 @@
         <article class="media content-section">
             <div class="media-body">
             <div class="article-metadata">
-                <a class="mr-2" href="#">{{ sc.owner }}</a>
-                <small class="text-muted">{{ sc.deployment_date }}</small>
+                <a class="mr-2" href="{{ url_for('scorecard', id = sc.id) }}">Model ID: {{ sc.id }}</a>
+                <small class="text-muted" type="date" data-date-format="dd-mm-yyyy">PDV Date: {{ sc.pdv_date.strftime('%b %d, %Y')}}</small>
             </div>
-            <h2><a class="article-title" href="#">{{ sc.product }} - {{ sc.type }}</a></h2>
-            <p class="article-content">Discriminatory Power: {{ sc.discrimatory_power }}</p>
-            <p class="article-content">PSI: {{ sc.psi }}</p>
+            <h2><a class="article-title" href="{{ url_for('scorecard', id = sc.id) }}">{{ sc.product }} - {{ sc.type }} Scorecard</a></h2>
+            <p class="article-content">Model Owner: {{ sc.owner }}</p>
+            <p class="article-content">Discriminatory Rating: {{ sc.discriminatory_rating }}</p>
+            <p class="article-content">PSI Rating: {{ sc.psi_rating }}</p>
             <p class="article-content">Final Rating: {{ sc.final_rating }}</p>
             </div>
         </article>
