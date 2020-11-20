@@ -1,29 +1,11 @@
 from flask_login import login_user
-from validation_app.models import Scorecard #, User
-from flask import render_template, url_for, flash, redirect
-from validation_app.forms import RegistrationForm, LoginForm, ScorecardForm
+from validation_app.models import Scorecard, Monitoring
+from flask import render_template, url_for, flash, redirect, request, send_file
+from validation_app.forms import RegistrationForm, LoginForm, ScorecardForm, MonitoringForm
 from validation_app import app, db, bcrypt
+from io import BytesIO
+from werkzeug.utils import secure_filename
 
-scorecards = [
-    {
-        'product': 'PL',
-        'owner': 'Ankur Nahar',
-        'type': 'Application Scorecard',
-        'deployment_date': 'May 30, 2020',
-        'discrimatory_power': 'At Par',
-        'psi': 'Average',
-        'final_rating': 'Acceptable'
-    },
-    {
-        'product': 'TWL',
-        'owner': 'Nikhil Chhedha',
-        'deployment_date': 'Sept 18, 2020',
-        'type': 'Fraud Scorecard',
-        'discrimatory_power': 'Average',
-        'psi': 'Average',
-        'final_rating': 'Rebuild'
-    }
-]
 
 @app.route("/")
 @app.route("/home")
@@ -98,6 +80,9 @@ def scorecard_submit():
             psi_rating = 'Average'
         else:
             psi_rating = 'Poor'
+        
+        attached_report = request.files['attached_report']
+        filename = secure_filename(attached_report.filename)
 
         scorecard = Scorecard(
             type = form.type.data,
@@ -116,9 +101,80 @@ def scorecard_submit():
             psi_rating = psi_rating,
             final_rating = form.final_rating.data,
             final_rating_comments = form.final_rating_comments.data,
-            pdv_date = form.pdv_date.data
+            pdv_date = form.pdv_date.data,
+            report_owner = form.report_owner.data,
+            attached_report = attached_report.read(),
+            attachment_name = filename
             )
         db.session.add(scorecard)
         db.session.commit()
         return redirect(url_for('home'))
     return render_template("scorecard_submit.html", title = "Scorecard Pre-Deployment Validation", form=form)
+
+@app.route("/download_pdv/<int:id>")
+def download_pdv(id):
+    pdv_report = Scorecard.query.get_or_404(id).attached_report
+    filename = Scorecard.query.get_or_404(id).attachment_name
+    return send_file(BytesIO(pdv_report), as_attachment = True, attachment_filename=filename)
+
+@app.route("/monitoring_submit/<int:scorecard_id>", methods = ['GET', 'POST'])
+def monitoring_submit(scorecard_id):
+    form = MonitoringForm()
+    scorecard = Scorecard.query.get_or_404(scorecard_id)
+    if form.validate_on_submit():
+
+        relative_ks_change = (float(form.monitoring_ks.data) - float(scorecard.dev_ks)) / float(scorecard.dev_ks)
+         
+        ks_relative_rating = None
+        if(relative_ks_change>= -0.15):
+            ks_relative_rating = 'At Par'
+        elif(relative_ks_change >= -0.30):
+            ks_relative_rating = 'Average'
+        else:
+            ks_relative_rating = 'Poor'
+
+        discriminatory_rating = None
+        if(scorecard.ks_absolute_rating == 'At Par' and scorecard.ks_relative_rating == 'At Par'):
+            discriminatory_rating = 'At Par'
+        elif(scorecard.ks_absolute_rating == 'Poor' and scorecard.ks_relative_rating == 'Poor'):
+            discriminatory_rating = 'Poor'
+        else: 
+            discriminatory_rating = 'Average'
+
+        psi_rating = None
+        if(form.psi.data <= 0.01):
+            psi_rating = 'At Par'
+        elif(form.psi.data <= 0.03):
+            psi_rating = 'Average'
+        else:
+            psi_rating = 'Poor'
+        
+        attached_report = request.files['attached_report']
+        filename = secure_filename(attached_report.filename)
+
+        monitoring = Monitoring(
+            scorecard = scorecard,
+            monitoring_period = form.monitoring_period.data,
+            current_period = form.current_period.data,
+            proxy_bad_definition = form.proxy_bad_definition.data,
+            monitoring_ks = form.monitoring_ks.data,
+            psi = form.psi.data,
+            relative_ks_change = relative_ks_change,
+            ks_relative_rating = ks_relative_rating,
+            discriminatory_rating = discriminatory_rating,
+            psi_rating = psi_rating,
+            final_rating = form.final_rating.data,
+            final_rating_comments = form.final_rating_comments.data,
+            monitoring_date = form.monitoring_date.data,
+            report_owner = form.report_owner.data,
+            attached_report = attached_report.read(),
+            attachment_name = filename
+            )
+        
+        db.session.add(monitoring)
+        db.session.commit()
+
+        return redirect(url_for('scorecard', id = scorecard.id))
+
+    title = f"Submit Monitoring: {scorecard.id}: {scorecard.type} {scorecard.product}"
+    return render_template("monitoring_submit.html", title = title, form=form, sc=scorecard)

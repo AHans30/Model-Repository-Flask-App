@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, FloatField, DateTimeField, TextAreaField, SelectField, DateField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, FloatField, FileField, TextAreaField, SelectField, DateField
 from wtforms.validators import DataRequired, Length, EqualTo, ValidationError
 from wtforms.widgets import TextArea
 #from validation_app.models import User
@@ -41,5 +41,20 @@ class ScorecardForm(FlaskForm):
     final_rating = SelectField('Final Rating', choices = ['Accepted', 'Rebuild', 'Other'], validators=[DataRequired(), Length(min = 2, max = 20)])
     final_rating_comments = TextAreaField('Detailed Report', validators=[Length(min = 0, max = 500)], widget=TextArea(), render_kw={"rows": 10, "cols": 70})
     pdv_date = DateField('PDV Date', validators=[DataRequired()],render_kw = {'type': 'date'})
+    report_owner = StringField('Report Owner', validators=[DataRequired(), Length(min = 2, max = 20)])
+    attached_report = FileField('Attach Report', validators=[DataRequired()], render_kw = {'type': 'file', 'class': 'div-input-file'})
 
+    submit = SubmitField('Sumbit PDV Report')
+
+class MonitoringForm(FlaskForm):
+    monitoring_period = StringField('Development Period', validators=[DataRequired(), Length(min = 2, max = 20)])
+    current_period = StringField('Current Period', validators=[DataRequired(), Length(min = 2, max = 20)])
+    proxy_bad_definition = StringField('Proxy Bad Definition (Optional)')
+    monitoring_ks = FloatField('Monitoring KS', validators=[DataRequired()])
+    psi = FloatField('PSI', validators=[DataRequired()])
+    final_rating = SelectField('Final Rating', choices = ['Accepted', 'Rebuild', 'Other'], validators=[DataRequired(), Length(min = 2, max = 20)])
+    final_rating_comments = TextAreaField('Detailed Report', validators=[Length(min = 0, max = 500)], widget=TextArea(), render_kw={"rows": 10, "cols": 70})
+    monitoring_date = DateField('Monitoring Date', validators=[DataRequired()],render_kw = {'type': 'date'})
+    attached_report = FileField('Attach Report', validators=[DataRequired()],render_kw = {'type': 'file'})
+    report_owner = StringField('Report Owner', validators=[DataRequired(), Length(min = 2, max = 20)])
     submit = SubmitField('Sumbit PDV Report')

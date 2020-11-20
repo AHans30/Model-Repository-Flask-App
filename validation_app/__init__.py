@@ -14,6 +14,10 @@ POSTGRES = {
 }
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://" + POSTGRES['user'] + ":" + \
     POSTGRES['pw'] + "@" + POSTGRES['host'] + ":" + POSTGRES['port'] + "/" + POSTGRES['db']
+
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+app.config['SQLALCHEMY_ECHO'] = False
+
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)

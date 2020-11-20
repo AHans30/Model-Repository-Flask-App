@@ -21,5 +21,11 @@
                 <p class="article-content">{{ sc.final_rating_comments }}</p>
             </div>
         </article>
+        <div class="mr-2">
+            <a class="btn btn-outline-info" href="{{ url_for('download_pdv', id = sc.id) }}">Download PDV Report</a>
+            <br><small type="date" data-date-format="dd-mm-yyyy">PDV Report Date: {{ sc.pdv_date.strftime('%b %d, %Y')}}</small>
+        </div>
+        <br>
+        <a class="btn btn-outline-info" href="{{ url_for('monitoring_submit', scorecard_id = sc.id) }}">Submit Monitoring Report</a>
 
 {% endblock content %}
