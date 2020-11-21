@@ -16,7 +16,10 @@ def home():
 @app.route("/scorecard/<int:id>")
 def scorecard(id):
     scorecard = Scorecard.query.get_or_404(id)
-    return render_template("scorecard.html", sc=scorecard)
+    monitorings = Monitoring.query.filter_by(scorecard_id=id).all()
+    if(len(monitorings)==0):
+        monitorings = False
+    return render_template("scorecard.html", sc=scorecard, monitorings=monitorings)
 
 @app.route("/about")
 def about():
@@ -178,3 +181,9 @@ def monitoring_submit(scorecard_id):
 
     title = f"Submit Monitoring: {scorecard.id}: {scorecard.type} {scorecard.product}"
     return render_template("monitoring_submit.html", title = title, form=form, sc=scorecard)
+
+@app.route("/download_monitoring/<int:id>")
+def download_monitoring(id):
+    monitoing_report = Monitoring.query.get_or_404(id).attached_report
+    filename = Monitoring.query.get_or_404(id).attachment_name
+    return send_file(BytesIO(monitoing_report), as_attachment = True, attachment_filename=filename)
