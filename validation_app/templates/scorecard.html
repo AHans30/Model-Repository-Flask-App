@@ -34,25 +34,26 @@
                 </div>
             </article>
             {% for mon in monitorings %}
+                <!--Can use ui/bootstrap's list groups here-->
                 <article class="media content-section">
                     <div class="media-body">
                     <h5><a class="article-title">Monitorings Date: {{ mon.monitoring_date.strftime('%b %d, %Y') }}</a></h5>
                     <p class="article-content">Discriminatory Rating: {{ mon.discriminatory_rating }}</p>
                     <p class="article-content">PSI Rating: {{ mon.psi_rating }}</p>
                     <p class="article-content">Final Rating: {{ mon.final_rating }}</p>
-                    <p><a type="button" class="btn btn-info" href="{{ url_for('download_monitoring', id = mon.monitoring_id) }}">Download full report</a></p>
+                    <p><a type="button" class="btn btn-info btn-sm" href="{{ url_for('download_monitoring', id = mon.monitoring_id) }}">Download full report</a></p>
                     </div>
                 </article>
             {% endfor %}
             <br>
             <small class="text-muted">Click below to add monitoring report for this scorecard.</small>
         {% else %}
-            <h5>No monitorings report pertaining to this scorecard submitted yet</h5>
+            <article class="media content-section">
+            <h5>No monitoring report pertaining to this scorecard submitted yet</h5>
+            </article>
             <br>
             <small class="text-muted">Click below to add monitoring report for this scorecard.</small>
         {% endif %}
         <br>
-        <p>
-        <a class="btn btn-outline-info" href="{{ url_for('monitoring_submit', scorecard_id = sc.id) }}">Add Monitoring Report</a>
-        </p>
+        <p><a class="btn btn-outline-info" href="{{ url_for('monitoring_submit', scorecard_id = sc.id) }}">Add Monitoring Report</a></p>
 {% endblock content %}

@@ -1,10 +1,11 @@
 from flask_login import login_user
 from validation_app.models import Scorecard, Monitoring
-from flask import render_template, url_for, flash, redirect, request, send_file
+from flask import render_template, url_for, flash, redirect, request, send_file, make_response
 from validation_app.forms import RegistrationForm, LoginForm, ScorecardForm, MonitoringForm
 from validation_app import app, db, bcrypt
 from io import BytesIO
 from werkzeug.utils import secure_filename
+import pandas as pd
 
 
 @app.route("/")
@@ -187,3 +188,11 @@ def download_monitoring(id):
     monitoing_report = Monitoring.query.get_or_404(id).attached_report
     filename = Monitoring.query.get_or_404(id).attachment_name
     return send_file(BytesIO(monitoing_report), as_attachment = True, attachment_filename=filename)
+
+@app.route("/download_repository")
+def download_repository():
+    repo_df = pd.read_sql_table('scorecard', con=db.engine)
+    response = make_response(repo_df.to_csv())
+    response.headers["Content-Disposition"] = "attachment; filename=Model_Repository.csv"
+    response.headers["Content-Type"] = "text/csv"
+    return response
