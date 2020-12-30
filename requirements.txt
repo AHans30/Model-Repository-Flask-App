@@ -1,0 +1,27 @@
+bcrypt @ file:///opt/concourse/worker/volumes/live/25966884-1a49-4448-62e7-44563eba29d2/volume/bcrypt_1597936171818/work
+certifi==2020.6.20
+cffi==1.14.0
+click==7.1.2
+Django==2.2.5
+Flask==1.1.2
+Flask-Bcrypt @ file:///tmp/build/80754af9/flask-bcrypt_1592513356562/work
+Flask-Login==0.5.0
+Flask-SQLAlchemy @ file:///tmp/build/80754af9/flask-sqlalchemy_1596836624296/work
+Flask-WTF==0.14.3
+itsdangerous==1.1.0
+Jinja2==2.11.2
+MarkupSafe==1.1.1
+mkl-fft==1.2.0
+mkl-random==1.1.1
+mkl-service==2.3.0
+numpy @ file:///opt/concourse/worker/volumes/live/a1b5ea96-b05c-40ba-5dfb-4542ece1c186/volume/numpy_and_numpy_base_1603491228242/work
+pandas @ file:///opt/concourse/worker/volumes/live/bfd63b8c-6035-4ed3-5bce-5690df409bf9/volume/pandas_1602088141563/work
+psycopg2==2.8.4
+pycparser @ file:///tmp/build/80754af9/pycparser_1594388511720/work
+python-dateutil==2.8.1
+pytz==2020.1
+six @ file:///opt/concourse/worker/volumes/live/f983ba11-c9fe-4dff-7ce7-d89b95b09771/volume/six_1605205318156/work
+SQLAlchemy @ file:///opt/concourse/worker/volumes/live/61b6a8b3-de0b-4a7e-7bf4-824014d54197/volume/sqlalchemy_1603816092551/work
+sqlparse @ file:///tmp/build/80754af9/sqlparse_1602184451250/work
+Werkzeug==1.0.1
+WTForms @ file:///tmp/build/80754af9/wtforms_1597707484216/work

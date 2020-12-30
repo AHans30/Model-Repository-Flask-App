@@ -7,7 +7,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = '40702441b4d60a037091caa7349a0dac'
 POSTGRES = {
     'user': 'postgres',
-    'pw': 'password',
+    'pw': 'postgres',
     'db': 'model_repository',
     'host': 'localhost',
     'port': '5432',
